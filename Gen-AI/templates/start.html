@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circular Images</title>
+<style>
+    body {
+        background-image: url('static/images/dummy.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: yellow;
+    }
+
+    .container-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        text-align: center;
+        margin: 20px;
+        background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+        border: 1px solid #ddd; /* Add border */
+    }
+
+    .circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 10px; /* Center the circle */
+    }
+
+    .circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    button {
+        padding: 15px 30px; /* Increased padding */
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 25px; /* Increased border radius */
+        transition: background-color 0.3s;
+        font-size: 18px; /* Increased font size */
+        font-weight: bold; /* Added font weight */
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body>
+
+<h1>Generative AI System Using Gemini</h1>
+
+<div class="container-wrapper">
+    <div class="container">
+        <div class="circle">
+            <img src="static/images/image11.jpg" alt="Image 1">
+        </div>
+        <form action="/text_gemini">
+            <button type="submit">QA System</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="circle">
+            <img src="static/images/image22.jpg" alt="Image 2">
+        </div>
+        <form action="/chat_asst">
+            <button type="submit">Chat Assistance</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="circle">
+            <img src="static/images/image33.jpg" alt="Image 2">
+        </div>
+        <form action="/chat_asst">
+            <button type="submit">Image to Text</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

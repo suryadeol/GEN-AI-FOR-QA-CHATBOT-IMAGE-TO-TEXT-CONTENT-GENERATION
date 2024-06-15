@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT Chat Interface</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('static/images/dummy.jpg'); /* Replace 'your-background-image.jpg' with the path to your background image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Ensures the background image stays fixed while scrolling */
+        background-position: center;
+        background-color: #f0f0f0; /* Fallback color in case the image is unavailable */
+    }
+    h1 {
+        text-align: center;
+        margin-top: 50px;
+        color: #fff; /* Blue color for the heading */
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Text shadow for emphasis */
+        font-size: 28px; /* Larger font size */
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .chat-box {
+        overflow-y: scroll;
+        max-height: 300px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .user-message {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end;
+    }
+    .bot-message {
+        background-color: #eee;
+        color: #333;
+    }
+    .input-box {
+        display: flex;
+    }
+    input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    input[type="submit"], .go-back-button {
+        padding: 12px 24px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        display: block;
+        margin: 20px auto;
+    }
+    input[type="submit"]:hover, .go-back-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body>
+
+<h1>Analyse With Generative AI</h1>
+
+<div class="container">
+    <div class="chat-box" id="chatBox">
+        <div class="message bot-message">Welcome! Ask me anything.</div>
+    </div>
+    <form id="questionForm" class="input-box" action="/chat_process" method="post">
+        <input type="text" name="question" placeholder="Type your message...">
+        <input type="submit" value="Send">
+    </form>
+</div>
+
+<a href="/" class="go-back-button">Go Back</a>
+
+<script>
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var form = event.target;
+        var formData = new FormData(form);
+        var chatBox = document.getElementById('chatBox');
+        
+        // Append user message to chat box
+        var userMessage = document.createElement('div');
+        userMessage.className = 'message user-message';
+        userMessage.textContent = formData.get('question');
+        chatBox.appendChild(userMessage);
+        
+        // Show loading state
+        var loadingMessage = document.createElement('div');
+        loadingMessage.className = 'message bot-message';
+        loadingMessage.textContent = 'Loading...';
+        chatBox.appendChild(loadingMessage);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Remove loading message
+            chatBox.removeChild(loadingMessage);
+            
+            // Append bot response to chat box
+            var botMessage = document.createElement('div');
+            botMessage.className = 'message bot-message';
+            botMessage.textContent = data;
+            chatBox.appendChild(botMessage);
+            
+            // Scroll to bottom of chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Show error message in chat box
+            var errorMessage = document.createElement('div');
+            errorMessage.className = 'message bot-message';
+            errorMessage.textContent = 'Error occurred. Please try again.';
+            chatBox.appendChild(errorMessage);
+        });
+        
+        // Clear input field
+        form.reset();
+    });
+</script>
+
+</body>
+</html>

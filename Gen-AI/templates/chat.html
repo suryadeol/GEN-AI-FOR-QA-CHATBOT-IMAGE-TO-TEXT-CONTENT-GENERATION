@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BERT Interface</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('static/images/dummy.jpg');
+        background-size: cover;
+    }
+     h1 {
+        text-align: center;
+        margin-top: 50px;
+        color: #fff; /* Blue color for the heading */
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Text shadow for emphasis */
+        font-size: 36px; /* Larger font size */
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"] {
+        width: calc(100% - 80px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    input[type="submit"] {
+        padding: 12px 24px;
+        border: none;
+        background-image: linear-gradient(45deg, #007bff, #00ff00);
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-image 0.3s;
+    }
+    input[type="submit"]:hover {
+        background-image: linear-gradient(45deg, #0056b3, #00cc00);
+    }
+    .response {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+    .bottom-button {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        border: none;
+        background-image: linear-gradient(45deg, #007bff, #00ff00);
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-image 0.3s;
+    }
+    .bottom-button:hover {
+        background-image: linear-gradient(45deg, #0056b3, #00cc00);
+    }
+</style>
+</head>
+<body>
+<h1>Question Answering System Using BERT and Generative AI Gemini</h1>
+<div class="container">
+    <form id="questionForm" action="/ask" method="post">
+        <input type="text" name="question" placeholder="Ask a question...">
+        <input type="submit" value="Ask">
+    </form>
+    <div class="response" id="responseArea"></div>
+</div>
+
+<form action="/bert_chat">
+    <button class="bottom-button">BERT Analyse</button>
+</form>
+
+<script>
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var form = event.target;
+        var formData = new FormData(form);
+        var responseArea = document.getElementById('responseArea');
+        var submitButton = form.querySelector('input[type="submit"]');
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.value = 'Loading...';
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Update response area
+            responseArea.innerHTML = data;
+            
+            // Reset form and button
+            form.reset();
+            submitButton.disabled = false;
+            submitButton.value = 'Ask';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Reset button in case of error
+            submitButton.disabled = false;
+            submitButton.value = 'Ask';
+        });
+    });
+</script>
+
+</body>
+</html>
